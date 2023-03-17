@@ -1,0 +1,51 @@
+<?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/admin/resource-meta.css', 'ResourceMeta'));
+$this->htmlElement('body')->appendAttribute('class', 'resource-meta');
+$resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties();
+?>
+
+<?php echo $this->pageTitle($this->translate('Properties'), 1, $this->translate('Resource meta'), $resourceTemplate->getLabel()); ?>
+
+<div id="page-actions">
+    <?php if ($this->userIsAllowed($resourceTemplate, 'update')): ?>
+    <a class="button" href="<?php echo $this->escapeHtml($this->url(null, ['action' => 'edit'], true)); ?>"><?php echo $this->translate('Edit'); ?></a>
+    <?php endif ?>
+</div>
+
+<div class="breadcrumbs">
+    <?php echo $this->hyperlink($this->translate('Resource templates'), $this->url('admin/resource-meta-resource-template')); ?>
+    <span class="separator"></span>
+    <?php echo $this->translate('Properties'); ?>
+</div>
+
+<?php if ($resourceTemplatePorperties): ?>
+<table class="tablesaw batch-edit" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?php echo $this->translate('Property'); ?></th>
+            <th><?php echo $this->translate('Alternate label'); ?></th>
+            <th><?php echo $this->translate('Data types'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($resourceTemplatePorperties as $resourceTemplateProperty): ?>
+        <?php $property = $resourceTemplateProperty->getProperty(); ?>
+        <tr>
+            <td><?php echo sprintf('%s : %s', $property->getVocabulary()->getLabel(), sprintf('<strong>%s</strong>', $property->getLabel())); ?></td>
+            <td><?php echo $resourceTemplateProperty->getAlternateLabel(); ?></td>
+            <td>
+                <ul>
+                    <?php foreach ($resourceTemplateProperty->getDataType() as $dataType): ?>
+                    <li><?php echo $this->dataType()->getLabel($dataType); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else: ?>
+<div class="no-resources">
+    <p><?php echo $this->translate('No resource template properties found.'); ?></p>
+</div>
+<?php endif; ?>
