@@ -5,17 +5,14 @@ use Doctrine\ORM\EntityManager;
 use Laminas\Form;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
-use Omeka\Entity\ResourceTemplate;
 
 class ResourceTemplateController extends AbstractActionController
 {
-    protected $metaNames;
-    protected $entityManager;
+    protected $resourceMeta;
 
-    public function __construct(array $metaNames, EntityManager $entityManager)
+    public function __construct($resourceMeta)
     {
-        $this->metaNames = $metaNames;
-        $this->entityManager = $entityManager;
+        $this->resourceMeta = $resourceMeta;
     }
 
     public function browseAction()
@@ -29,17 +26,17 @@ class ResourceTemplateController extends AbstractActionController
 
     public function showAction()
     {
-        $resourceTemplate = $this->getResourceTemplate($this->params('id'));
+        $resourceTemplate = $this->resourceMeta->getResourceTemplate($this->params('id'));
 
         $view = new ViewModel;
         $view->setVariable('resourceTemplate', $resourceTemplate);
-        $view->setVariable('resourceTemplateMetaNames', $this->getResourceTemplateMetaNames($resourceTemplate));
+        $view->setVariable('resourceTemplateMetaNames', $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate));
         return $view;
     }
 
     public function editAction()
     {
-        $resourceTemplate = $this->getResourceTemplate($this->params('id'));
+        $resourceTemplate = $this->resourceMeta->getResourceTemplate($this->params('id'));
         if (!$this->userIsAllowed($resourceTemplate, 'update')) {
             return $this->redirect()->toRoute('admin/resource-meta', [], true);
         }
@@ -49,7 +46,7 @@ class ResourceTemplateController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
-                $this->setResourceTemplateMetaNames($this->params()->fromPost('resource_template_meta_names', []));
+                $this->resourceMeta->setResourceTemplateMetaNames($this->params()->fromPost('resource_template_meta_names', []));
                 $this->messenger()->addSuccess('Resource meta successfully updated'); // @translate
                 return $this->redirect()->toRoute(null, ['action' => 'show'], true);
             } else {
@@ -59,7 +56,7 @@ class ResourceTemplateController extends AbstractActionController
 
         // Build the multiselect.
         $valueOptions = [];
-        foreach ($this->metaNames as $optgroupName => $optgroupData) {
+        foreach ($this->resourceMeta->getMetaNames() as $optgroupName => $optgroupData) {
             $valueOptions[$optgroupName] = [
                 'label' => $optgroupData['label'],
                 'options' => [],
@@ -80,47 +77,7 @@ class ResourceTemplateController extends AbstractActionController
         $view->setVariable('form', $form);
         $view->setVariable('select', $select);
         $view->setVariable('resourceTemplate', $resourceTemplate);
-        $view->setVariable('resourceTemplateMetaNames', $this->getResourceTemplateMetaNames($resourceTemplate));
+        $view->setVariable('resourceTemplateMetaNames', $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate));
         return $view;
-    }
-
-    /**
-     * Get a resource template entity.
-     *
-     * @param int $resourceTemplateId
-     * @return ResourceTemplate
-     */
-    protected function getResourceTemplate($resourceTemplateId)
-    {
-        return $this->entityManager->find('Omeka\Entity\ResourceTemplate', $resourceTemplateId);
-    }
-
-    /**
-     * Get persisted meta names for a specific resource template.
-     *
-     * @param ResourceTemplate $resourceTemplate
-     * @return array Keyed by resource template property ID
-     */
-    protected function getResourceTemplateMetaNames(ResourceTemplate $resourceTemplate)
-    {
-        $resourceTemplateMetaNamesEntities = $this->entityManager
-            ->getRepository('ResourceMeta\Entity\ResourceMetaResourceTemplateMetaNames')
-            ->findBy(['resourceTemplate' => $resourceTemplate]);
-        $resourceTemplateMetaNames = [];
-        foreach ($resourceTemplateMetaNamesEntities as $resourceTemplateMetaNamesEntity) {
-            $resourceTemplateMetaNames[$resourceTemplateMetaNamesEntity->getResourceTemplateProperty()->getId()] = $resourceTemplateMetaNamesEntity->getMetaNames();
-        }
-        return $resourceTemplateMetaNames;
-    }
-
-    /**
-     * Persist meta names for a specific resource template.
-     *
-     * @param array $resourceTemplateMetaNames
-     */
-    protected function setResourceTemplateMetaNames(array $resourceTemplateMetaNames)
-    {
-        echo '<pre>';print_r($resourceTemplateMetaNames);exit;
-        // @todo Persist meta names
     }
 }

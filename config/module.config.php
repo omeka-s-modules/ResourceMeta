@@ -26,6 +26,11 @@ return [
             sprintf('%s/../data/doctrine-proxies', __DIR__),
         ],
     ],
+    'service_manager' => [
+        'factories' => [
+            'ResourceMeta\ResourceMeta' => Service\Stdlib\ResourceMetaFactory::class,
+        ],
+    ],
     'controllers' => [
         'invokables' => [
             'ResourceMeta\Controller\Admin\Index' => Controller\Admin\IndexController::class,
