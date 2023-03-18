@@ -1,16 +1,18 @@
 <?php
 namespace ResourceMeta\Controller\Admin;
 
+use Doctrine\ORM\EntityManager;
 use Laminas\Form;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
+use Omeka\Entity\ResourceTemplate;
 
 class ResourceTemplateController extends AbstractActionController
 {
     protected $metaNames;
     protected $entityManager;
 
-    public function __construct(array $metaNames, $entityManager)
+    public function __construct(array $metaNames, EntityManager $entityManager)
     {
         $this->metaNames = $metaNames;
         $this->entityManager = $entityManager;
@@ -27,40 +29,27 @@ class ResourceTemplateController extends AbstractActionController
 
     public function showAction()
     {
-        $resourceTemplateId = $this->params('id');
-        $resourceTemplate = $this->entityManager->find('Omeka\Entity\ResourceTemplate', $resourceTemplateId);
+        $resourceTemplate = $this->getResourceTemplate($this->params('id'));
 
         $view = new ViewModel;
         $view->setVariable('resourceTemplate', $resourceTemplate);
+        $view->setVariable('resourceTemplateMetaNames', $this->getResourceTemplateMetaNames($resourceTemplate));
         return $view;
     }
 
     public function editAction()
     {
-        $resourceTemplateId = $this->params('id');
-        $resourceTemplate = $this->entityManager->find('Omeka\Entity\ResourceTemplate', $resourceTemplateId);
+        $resourceTemplate = $this->getResourceTemplate($this->params('id'));
         if (!$this->userIsAllowed($resourceTemplate, 'update')) {
             return $this->redirect()->toRoute('admin/resource-meta', [], true);
         }
 
-        $resourceTemplateMetaNamesEntities = $this->entityManager
-            ->getRepository('ResourceMeta\Entity\ResourceMetaResourceTemplateMetaNames')
-            ->findBy(['resourceTemplate' => $resourceTemplate]);
-        $resourceTemplateMetaNames = [];
-        foreach ($resourceTemplateMetaNamesEntities as $resourceTemplateMetaNamesEntity) {
-            $resourceTemplateMetaNames[$resourceTemplateMetaNamesEntity->getResourceTemplateProperty()->getId()] = $resourceTemplateMetaNamesEntity->getMeta();
-        }
-
         // Must use a generic form for CSRF protection.
         $form = $this->getForm(Form\Form::class);
-
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
-                echo '<pre>';print_r($this->params()->fromPost());exit;
-                // @todo Save resource meta via $this->params()->fromPost('resource_meta')
-                // - delete all rows for this resource template
-                // - add user selected rows
+                $this->setResourceTemplateMetaNames($this->params()->fromPost('resource_template_meta_names', []));
                 $this->messenger()->addSuccess('Resource meta successfully updated'); // @translate
                 return $this->redirect()->toRoute(null, ['action' => 'show'], true);
             } else {
@@ -91,7 +80,47 @@ class ResourceTemplateController extends AbstractActionController
         $view->setVariable('form', $form);
         $view->setVariable('select', $select);
         $view->setVariable('resourceTemplate', $resourceTemplate);
-        $view->setVariable('resourceTemplateMetaNames', $resourceTemplateMetaNames);
+        $view->setVariable('resourceTemplateMetaNames', $this->getResourceTemplateMetaNames($resourceTemplate));
         return $view;
+    }
+
+    /**
+     * Get a resource template entity.
+     *
+     * @param int $resourceTemplateId
+     * @return ResourceTemplate
+     */
+    protected function getResourceTemplate($resourceTemplateId)
+    {
+        return $this->entityManager->find('Omeka\Entity\ResourceTemplate', $resourceTemplateId);
+    }
+
+    /**
+     * Get persisted meta names for a specific resource template.
+     *
+     * @param ResourceTemplate $resourceTemplate
+     * @return array Keyed by resource template property ID
+     */
+    protected function getResourceTemplateMetaNames(ResourceTemplate $resourceTemplate)
+    {
+        $resourceTemplateMetaNamesEntities = $this->entityManager
+            ->getRepository('ResourceMeta\Entity\ResourceMetaResourceTemplateMetaNames')
+            ->findBy(['resourceTemplate' => $resourceTemplate]);
+        $resourceTemplateMetaNames = [];
+        foreach ($resourceTemplateMetaNamesEntities as $resourceTemplateMetaNamesEntity) {
+            $resourceTemplateMetaNames[$resourceTemplateMetaNamesEntity->getResourceTemplateProperty()->getId()] = $resourceTemplateMetaNamesEntity->getMetaNames();
+        }
+        return $resourceTemplateMetaNames;
+    }
+
+    /**
+     * Persist meta names for a specific resource template.
+     *
+     * @param array $resourceTemplateMetaNames
+     */
+    protected function setResourceTemplateMetaNames(array $resourceTemplateMetaNames)
+    {
+        echo '<pre>';print_r($resourceTemplateMetaNames);exit;
+        // @todo Persist meta names
     }
 }
