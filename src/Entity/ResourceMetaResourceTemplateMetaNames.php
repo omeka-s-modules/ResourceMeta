@@ -9,7 +9,7 @@ use Omeka\Entity\ResourceTemplateProperty;
 /**
  * @Entity
  */
-class ResourceMetaMetaNames extends AbstractEntity
+class ResourceMetaResourceTemplateMetaNames extends AbstractEntity
 {
     /**
      * @Id
@@ -78,9 +78,9 @@ class ResourceMetaMetaNames extends AbstractEntity
      */
     protected $metaNames;
 
-    public function setMetaNames(array $metaNames) : void
+    public function setMetanames(array $metaNames) : void
     {
-        $this->metaNames = $metaNames;
+        $this->meta = $meta;
     }
 
     public function getMetaNames() : array

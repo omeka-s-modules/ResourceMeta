@@ -26,7 +26,7 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
     <thead>
         <tr>
             <th><?php echo $this->translate('Property'); ?></th>
-            <th><?php echo $this->translate('Resource meta'); ?></th>
+            <th><?php echo $this->translate('Meta'); ?></th>
             <th><?php echo $this->translate('Alternate label'); ?></th>
             <th><?php echo $this->translate('Data types'); ?></th>
         </tr>
@@ -38,7 +38,8 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
             <td><?php echo sprintf('%s : %s', $property->getVocabulary()->getLabel(), sprintf('<strong>%s</strong>', $property->getLabel())); ?></td>
             <td>
                 <?php
-                $select->setName($resourceTemplateProperty->getId());
+                $select->setName(sprintf('resource_template_meta_names[%s]', $resourceTemplateProperty->getId()));
+                $select->setValue($resourceTemplateMetaNames[$resourceTemplateProperty->getId()] ?? null);
                 echo $this->formElement($select);
                 ?>
             </td>
