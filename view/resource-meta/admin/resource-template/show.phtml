@@ -23,6 +23,7 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
     <thead>
         <tr>
             <th><?php echo $this->translate('Property'); ?></th>
+            <th><?php echo $this->translate('Resource meta'); ?></th>
             <th><?php echo $this->translate('Alternate label'); ?></th>
             <th><?php echo $this->translate('Data types'); ?></th>
         </tr>
@@ -32,6 +33,7 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
         <?php $property = $resourceTemplateProperty->getProperty(); ?>
         <tr>
             <td><?php echo sprintf('%s : %s', $property->getVocabulary()->getLabel(), sprintf('<strong>%s</strong>', $property->getLabel())); ?></td>
+            <td></td>
             <td><?php echo $resourceTemplateProperty->getAlternateLabel(); ?></td>
             <td>
                 <ul>
