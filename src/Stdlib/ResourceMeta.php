@@ -1,7 +1,7 @@
 <?php
 namespace ResourceMeta\Stdlib;
 
-use Omeka\Entity\ResourceTemplate;
+use Omeka\Entity;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class ResourceMeta
@@ -21,49 +21,40 @@ class ResourceMeta
 
     /**
      * Get meta names from config.
-     *
-     * @return array
      */
-    public function getMetaNames()
+    public function getMetaNames() : array
     {
         return $this->metaNames;
     }
 
     /**
-     * Get a resource template entity.
-     *
-     * @param int $resourceTemplateId
-     * @return ResourceTemplate
+     * Get an entity.
      */
-    public function getResourceTemplate($resourceTemplateId)
+    public function getEntity(string $entityName, int $entityId) : ?Entity\EntityInterface
     {
-        return $this->entityManager->find('Omeka\Entity\ResourceTemplate', $resourceTemplateId);
+        return $this->entityManager->find($entityName, $entityId);
     }
 
     /**
      * Get persisted meta names for a specific resource template.
-     *
-     * @param ResourceTemplate $resourceTemplate
-     * @return array Keyed by resource template property ID
      */
-    public function getResourceTemplateMetaNames(ResourceTemplate $resourceTemplate)
+    public function getResourceTemplateMetaNames(int $resourceTemplateId) : array
     {
         $resourceTemplateMetaNamesEntities = $this->entityManager
             ->getRepository('ResourceMeta\Entity\ResourceMetaResourceTemplateMetaNames')
-            ->findBy(['resourceTemplate' => $resourceTemplate]);
+            ->findBy(['resourceTemplate' => $resourceTemplateId]);
         $resourceTemplateMetaNames = [];
         foreach ($resourceTemplateMetaNamesEntities as $resourceTemplateMetaNamesEntity) {
-            $resourceTemplateMetaNames[$resourceTemplateMetaNamesEntity->getResourceTemplateProperty()->getId()] = $resourceTemplateMetaNamesEntity->getMetaNames();
+            $resourceTemplatePropertyId = $resourceTemplateMetaNamesEntity->getResourceTemplateProperty()->getId();
+            $resourceTemplateMetaNames[$resourceTemplatePropertyId] = $resourceTemplateMetaNamesEntity->getMetaNames();
         }
         return $resourceTemplateMetaNames;
     }
 
     /**
      * Persist meta names for a specific resource template.
-     *
-     * @param array $resourceTemplateMetaNames
      */
-    public function setResourceTemplateMetaNames(array $resourceTemplateMetaNames)
+    public function setResourceTemplateMetaNames(array $resourceTemplateMetaNames) : void
     {
         echo '<pre>';print_r($resourceTemplateMetaNames);exit;
         // @todo Persist meta names

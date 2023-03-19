@@ -19,24 +19,34 @@ class ResourceTemplateController extends AbstractActionController
     {
         $resourceTemplates = $this->api()->search('resource_templates', ['sort_by' => 'label'])->getContent();
 
+        $resourceTemplatesMetaNames = [];
+        foreach ($resourceTemplates as $resourceTemplate) {
+            $resourceTemplateMetaNames = $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate->id());
+            $resourceTemplatesMetaNames[$resourceTemplate->id()] = array_merge(...$resourceTemplateMetaNames);
+        }
+
         $view = new ViewModel;
         $view->setVariable('resourceTemplates', $resourceTemplates);
+        $view->setVariable('resourceTemplatesMetaNames', $resourceTemplatesMetaNames);
         return $view;
     }
 
     public function showAction()
     {
-        $resourceTemplate = $this->resourceMeta->getResourceTemplate($this->params('id'));
+        $resourceTemplate = $this->resourceMeta->getEntity('Omeka\Entity\ResourceTemplate', $this->params('id'));
+        $resourceTemplateMetaNames = $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate->getId());
 
         $view = new ViewModel;
         $view->setVariable('resourceTemplate', $resourceTemplate);
-        $view->setVariable('resourceTemplateMetaNames', $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate));
+        $view->setVariable('resourceTemplateMetaNames', $resourceTemplateMetaNames);
         return $view;
     }
 
     public function editAction()
     {
-        $resourceTemplate = $this->resourceMeta->getResourceTemplate($this->params('id'));
+        $resourceTemplate = $this->resourceMeta->getEntity('Omeka\Entity\ResourceTemplate', $this->params('id'));
+        $resourceTemplateMetaNames = $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate->getId());
+
         if (!$this->userIsAllowed($resourceTemplate, 'update')) {
             return $this->redirect()->toRoute('admin/resource-meta', [], true);
         }
@@ -46,7 +56,8 @@ class ResourceTemplateController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
-                $this->resourceMeta->setResourceTemplateMetaNames($this->params()->fromPost('resource_template_meta_names', []));
+                $resourceTemplateMetaNames = $this->params()->fromPost('resource_template_meta_names', []);
+                $this->resourceMeta->setResourceTemplateMetaNames($resourceTemplateMetaNames);
                 $this->messenger()->addSuccess('Resource meta successfully updated'); // @translate
                 return $this->redirect()->toRoute(null, ['action' => 'show'], true);
             } else {
@@ -77,7 +88,7 @@ class ResourceTemplateController extends AbstractActionController
         $view->setVariable('form', $form);
         $view->setVariable('select', $select);
         $view->setVariable('resourceTemplate', $resourceTemplate);
-        $view->setVariable('resourceTemplateMetaNames', $this->resourceMeta->getResourceTemplateMetaNames($resourceTemplate));
+        $view->setVariable('resourceTemplateMetaNames', $resourceTemplateMetaNames);
         return $view;
     }
 }

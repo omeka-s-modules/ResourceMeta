@@ -15,6 +15,7 @@ $this->htmlElement('body')->appendAttribute('class', 'browse resource-meta');
         <tr>
             <th><?php echo $this->translate('Label'); ?></th>
             <th><?php echo $this->translate('Owner'); ?></th>
+            <th><?php echo $this->translate('Meta names count'); ?></th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@ $this->htmlElement('body')->appendAttribute('class', 'browse resource-meta');
                 </ul>
             </td>
             <td><?php echo $owner ? $this->hyperlink($owner->name(), $this->url('admin/id', ['controller' => 'user', 'action' => 'show', 'id' => $owner->id()])) : $this->translate('[No owner]'); ?></td>
+            <td><?php echo count($resourceTemplatesMetaNames[$resourceTemplate->id()]); ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
