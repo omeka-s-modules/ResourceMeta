@@ -8,6 +8,13 @@ use Omeka\Entity\ResourceTemplateProperty;
 
 /**
  * @Entity
+ * @Table(
+ *     uniqueConstraints={
+ *         @UniqueConstraint(
+ *             columns={"resource_template_id", "resource_template_property_id"}
+ *         ),
+ *     }
+ * )
  */
 class ResourceMetaResourceTemplateMetaNames extends AbstractEntity
 {
@@ -80,7 +87,7 @@ class ResourceMetaResourceTemplateMetaNames extends AbstractEntity
 
     public function setMetanames(array $metaNames) : void
     {
-        $this->meta = $meta;
+        $this->metaNames = $metaNames;
     }
 
     public function getMetaNames() : array

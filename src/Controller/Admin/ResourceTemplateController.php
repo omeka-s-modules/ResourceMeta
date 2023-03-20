@@ -57,7 +57,7 @@ class ResourceTemplateController extends AbstractActionController
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
                 $resourceTemplateMetaNames = $this->params()->fromPost('resource_template_meta_names', []);
-                $this->resourceMeta->setResourceTemplateMetaNames($resourceTemplateMetaNames);
+                $this->resourceMeta->setResourceTemplateMetaNames($resourceTemplate->getId(), $resourceTemplateMetaNames);
                 $this->messenger()->addSuccess('Resource meta successfully updated'); // @translate
                 return $this->redirect()->toRoute(null, ['action' => 'show'], true);
             } else {

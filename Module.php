@@ -32,7 +32,7 @@ class Module extends AbstractModule
     {
         $conn = $services->get('Omeka\Connection');
         $sql = <<<'SQL'
-CREATE TABLE resource_meta_resource_template_meta_names (id INT UNSIGNED AUTO_INCREMENT NOT NULL, resource_template_id INT NOT NULL, resource_template_property_id INT NOT NULL, meta_names LONGTEXT NOT NULL COMMENT '(DC2Type:json)', INDEX IDX_E4071E6A16131EA (resource_template_id), INDEX IDX_E4071E6A2A6B767B (resource_template_property_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
+CREATE TABLE resource_meta_resource_template_meta_names (id INT UNSIGNED AUTO_INCREMENT NOT NULL, resource_template_id INT NOT NULL, resource_template_property_id INT NOT NULL, meta_names LONGTEXT NOT NULL COMMENT '(DC2Type:json)', INDEX IDX_E4071E6A16131EA (resource_template_id), INDEX IDX_E4071E6A2A6B767B (resource_template_property_id), UNIQUE INDEX UNIQ_E4071E6A16131EA2A6B767B (resource_template_id, resource_template_property_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;
 ALTER TABLE resource_meta_resource_template_meta_names ADD CONSTRAINT FK_E4071E6A16131EA FOREIGN KEY (resource_template_id) REFERENCES resource_template (id) ON DELETE CASCADE;
 ALTER TABLE resource_meta_resource_template_meta_names ADD CONSTRAINT FK_E4071E6A2A6B767B FOREIGN KEY (resource_template_property_id) REFERENCES resource_template_property (id) ON DELETE CASCADE;
 SQL;
