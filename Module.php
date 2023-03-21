@@ -50,5 +50,27 @@ SQL;
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
     {
+        $sharedEventManager->attach(
+            'Omeka\Controller\Site\Item',
+            'view.show.before',
+            [$this, 'addResourceMeta']
+        );
+        $sharedEventManager->attach(
+            'Omeka\Controller\Site\ItemSet',
+            'view.show.before',
+            [$this, 'addResourceMeta']
+        );
+        $sharedEventManager->attach(
+            'Omeka\Controller\Site\Media',
+            'view.show.before',
+            [$this, 'addResourceMeta']
+        );
+    }
+
+    public function addResourceMeta(Event $event) : void
+    {
+        $this->getServiceLocator()
+            ->get('ResourceMeta\ResourceMeta')
+            ->addResourceMeta($event->getTarget());
     }
 }
