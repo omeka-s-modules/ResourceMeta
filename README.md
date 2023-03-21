@@ -1,6 +1,10 @@
 # Resource Meta
 
-An [Omeka S](https://omeka.org/s/) module for adding meta tags to resources
+An [Omeka S](https://omeka.org/s/) module for adding `<meta>` tags to resources.
+
+With this module, administrators can map resource properties to [metadata elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta).
+This is helpful for web indexing and search engine optimization (SEO), making your
+public resources more richly described and discoverable.
 
 # Copyright
 
