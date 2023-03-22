@@ -18,8 +18,12 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
     <div class="separator"></div>
     <?php echo $this->hyperlink($this->translate('Properties'), $this->url(null, ['action' => 'show'], true)); ?>
     <div class="separator"></div>
-    Edit
+    <?php echo $this->translate('Edit'); ?>
 </div>
+
+<button type="button" id="clear-button"><?php echo $this->translate('Clear'); ?></button>
+<button type="button" id="reset-button"><?php echo $this->translate('Reset'); ?></button>
+<button type="button" id="map-dublin-core-button"><?php echo $this->translate('Map Dublin Core'); ?></button>
 
 <?php if ($resourceTemplatePorperties): ?>
 <table class="tablesaw batch-edit" data-tablesaw-mode="stack">
@@ -33,13 +37,19 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
     </thead>
     <tbody>
         <?php foreach ($resourceTemplatePorperties as $resourceTemplateProperty): ?>
-        <?php $property = $resourceTemplateProperty->getProperty(); ?>
+        <?php
+        $property = $resourceTemplateProperty->getProperty();
+        $propertyTerm = sprintf('%s:%s', $property->getVocabulary()->getPrefix(), $property->getLocalName());
+        $metaNames = $resourceTemplateMetaNames[$resourceTemplateProperty->getId()] ?? [];
+        ?>
         <tr>
             <td><?php echo sprintf('%s : %s', $property->getVocabulary()->getLabel(), sprintf('<strong>%s</strong>', $property->getLabel())); ?></td>
             <td>
                 <?php
                 $select->setName(sprintf('resource_template_meta_names[%s]', $resourceTemplateProperty->getId()));
-                $select->setValue($resourceTemplateMetaNames[$resourceTemplateProperty->getId()] ?? null);
+                $select->setValue($metaNames);
+                $select->setAttribute('data-term', $propertyTerm);
+                $select->setAttribute('data-meta-names', json_encode($metaNames));
                 echo $this->formElement($select);
                 ?>
             </td>
@@ -62,3 +72,86 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
 <?php endif; ?>
 
 <?php echo $this->form()->closeTag(); ?>
+
+<script>
+const dcMap = new Map();
+dcMap.set('dcterms:abstract', 'dcterms.abstract')
+dcMap.set('dcterms:accessRights', 'dcterms.accessRights')
+dcMap.set('dcterms:accrualMethod', 'dcterms.accrualMethod')
+dcMap.set('dcterms:accrualPeriodicity', 'dcterms.accrualPeriodicity')
+dcMap.set('dcterms:accrualPolicy', 'dcterms.accrualPolicy')
+dcMap.set('dcterms:alternative', 'dcterms.alternative')
+dcMap.set('dcterms:audience', 'dcterms.audience')
+dcMap.set('dcterms:available', 'dcterms.available')
+dcMap.set('dcterms:bibliographicCitation', 'dcterms.bibliographicCitation')
+dcMap.set('dcterms:conformsTo', 'dcterms.conformsTo')
+dcMap.set('dcterms:contributor', 'dcterms.contributor')
+dcMap.set('dcterms:coverage', 'dcterms.coverage')
+dcMap.set('dcterms:created', 'dcterms.created')
+dcMap.set('dcterms:creator', 'dcterms.creator')
+dcMap.set('dcterms:date', 'dcterms.date')
+dcMap.set('dcterms:dateAccepted', 'dcterms.dateAccepted')
+dcMap.set('dcterms:dateCopyrighted', 'dcterms.dateCopyrighted')
+dcMap.set('dcterms:dateSubmitted', 'dcterms.dateSubmitted')
+dcMap.set('dcterms:description', 'dcterms.description')
+dcMap.set('dcterms:educationLevel', 'dcterms.educationLevel')
+dcMap.set('dcterms:extent', 'dcterms.extent')
+dcMap.set('dcterms:format', 'dcterms.format')
+dcMap.set('dcterms:hasFormat', 'dcterms.hasFormat')
+dcMap.set('dcterms:hasPart', 'dcterms.hasPart')
+dcMap.set('dcterms:hasVersion', 'dcterms.hasVersion')
+dcMap.set('dcterms:identifier', 'dcterms.identifier')
+dcMap.set('dcterms:instructionalMethod', 'dcterms.instructionalMethod')
+dcMap.set('dcterms:isFormatOf', 'dcterms.isFormatOf')
+dcMap.set('dcterms:isPartOf', 'dcterms.isPartOf')
+dcMap.set('dcterms:isReferencedBy', 'dcterms.isReferencedBy')
+dcMap.set('dcterms:isReplacedBy', 'dcterms.isReplacedBy')
+dcMap.set('dcterms:isRequiredBy', 'dcterms.isRequiredBy')
+dcMap.set('dcterms:issued', 'dcterms.issued')
+dcMap.set('dcterms:isVersionOf', 'dcterms.isVersionOf')
+dcMap.set('dcterms:language', 'dcterms.language')
+dcMap.set('dcterms:license', 'dcterms.license')
+dcMap.set('dcterms:mediator', 'dcterms.mediator')
+dcMap.set('dcterms:medium', 'dcterms.medium')
+dcMap.set('dcterms:modified', 'dcterms.modified')
+dcMap.set('dcterms:provenance', 'dcterms.provenance')
+dcMap.set('dcterms:publisher', 'dcterms.publisher')
+dcMap.set('dcterms:references', 'dcterms.references')
+dcMap.set('dcterms:relation', 'dcterms.relation')
+dcMap.set('dcterms:replaces', 'dcterms.replaces')
+dcMap.set('dcterms:requires', 'dcterms.requires')
+dcMap.set('dcterms:rights', 'dcterms.rights')
+dcMap.set('dcterms:rightsHolder', 'dcterms.rightsHolder')
+dcMap.set('dcterms:source', 'dcterms.source')
+dcMap.set('dcterms:spatial', 'dcterms.spatial')
+dcMap.set('dcterms:subject', 'dcterms.subject')
+dcMap.set('dcterms:tableOfContents', 'dcterms.tableOfContents')
+dcMap.set('dcterms:temporal', 'dcterms.temporal')
+dcMap.set('dcterms:title', 'dcterms.title')
+dcMap.set('dcterms:type', 'dcterms.type')
+dcMap.set('dcterms:valid', 'dcterms.valid')
+
+// Handle clear button.
+$('#clear-button').on('click', function(e) {
+    $('.meta-name-select').val('').trigger("chosen:updated");
+});
+
+// Handle reset button.
+$('#reset-button').on('click', function(e) {
+    $('.meta-name-select').val('').trigger("chosen:updated");
+    $('.meta-name-select').each(function() {
+        const thisSelect = $(this);
+        thisSelect.val(thisSelect.data('meta-names'));
+    });
+    $('.meta-name-select').trigger("chosen:updated");
+});
+
+// Handle map Dublin Core button.
+$('#map-dublin-core-button').on('click', function(e) {
+    $('.meta-name-select').val('').trigger("chosen:updated");
+    for (const [dcTerm, dcMetaName] of dcMap) {
+        $(`.meta-name-select[data-term="${dcTerm}"]`).val([dcMetaName]);
+    }
+    $('.meta-name-select').trigger("chosen:updated");
+});
+</script>

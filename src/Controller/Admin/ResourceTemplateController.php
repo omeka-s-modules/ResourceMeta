@@ -80,7 +80,7 @@ class ResourceTemplateController extends AbstractActionController
         $select->setValueOptions($valueOptions);
         $select->setAttributes([
             'multiple' => true,
-            'class' => 'chosen-select',
+            'class' => 'meta-name-select chosen-select',
             'data-placeholder' => 'Select meta names…', // @translate
         ]);
 
