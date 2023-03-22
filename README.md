@@ -2,9 +2,16 @@
 
 An [Omeka S](https://omeka.org/s/) module for adding `<meta>` tags to resources.
 
-With this module, administrators can map resource properties to [metadata elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta).
+With this module, administrators can map resource properties to
+[metadata elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta).
 This is helpful for web indexing and search engine optimization (SEO), making your
 public resources more richly described and discoverable.
+
+Here are a few resources that may help you map your properties for bibliographic
+purposes:
+
+- [Metadata tags for academic publications](http://div.div1.com.au/div-thoughts/div-commentaries/66-div-commentary-metadata)
+- [Google Scholar: Inclusion Guidelines for Webmasters](https://scholar.google.com/intl/en/scholar/inclusion.html#indexing)
 
 # Copyright
 
