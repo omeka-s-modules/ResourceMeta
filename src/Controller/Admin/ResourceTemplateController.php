@@ -1,7 +1,6 @@
 <?php
 namespace ResourceMeta\Controller\Admin;
 
-use Doctrine\ORM\EntityManager;
 use Laminas\Form;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;

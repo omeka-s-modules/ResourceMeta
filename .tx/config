@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:omeka:r:omeka-s:p:module-ResourceMeta]
+[o:omeka:p:omeka-s:r:module-ResourceMeta]
 file_filter = language/<lang>.po
 minimum_perc = 10
 source_file = language/template.pot
