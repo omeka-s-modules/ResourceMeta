@@ -58,7 +58,9 @@ $resourceTemplatePorperties = $resourceTemplate->getResourceTemplateProperties()
             <td>
                 <ul>
                     <?php foreach ($resourceTemplateProperty->getDataType() as $dataType): ?>
-                    <li><?php echo $this->dataType()->getLabel($dataType); ?></li>
+                    <?php if ($dataType = $this->dataType()->getDataType($dataType)): ?>
+                    <li><?php echo $dataType->getLabel(); ?></li>
+                    <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
             </td>
