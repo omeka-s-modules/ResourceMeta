@@ -390,5 +390,14 @@ return [
                 'prism.wordCount',
             ],
         ],
+        'seo' => [
+            'label' => 'Search Engine Optimizations', // @translate
+            'meta_names' => [
+                'description',
+                'author',
+                'date',
+                'keywords',
+            ],
+        ],
     ],
 ];
