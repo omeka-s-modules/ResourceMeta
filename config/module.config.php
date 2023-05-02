@@ -395,16 +395,6 @@ return [
             'meta_names' => [
                 'description',
                 'author',
-                'keywords',
-            ],
-        ],
-        'opengraph' => [
-            'label' => 'Open Graph', // @translate
-            'meta_names' => [
-                'og:title',
-                'og:description',
-                'og:image',
-                'og:article:published_time',
             ],
         ],
     ],
