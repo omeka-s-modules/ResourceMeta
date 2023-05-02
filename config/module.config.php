@@ -405,7 +405,7 @@ return [
                 'og:description',
                 'og:image',
                 'og:article:published_time',
-            ]
+            ],
         ],
     ],
 ];
