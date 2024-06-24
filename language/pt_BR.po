@@ -2,76 +2,80 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+# Translators:
+# Deidson Rafael Trindade <drafael@usp.br>, 2024
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-24 15:39-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-03-29 16:22+0000\n"
+"Last-Translator: Deidson Rafael Trindade <drafael@usp.br>, 2024\n"
+"Language-Team: Portuguese (Brazil) (https://app.transifex.com/omeka/teams/14184/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: view/resource-meta/admin/resource-template/browse.phtml:6
 #: view/resource-meta/admin/resource-template/edit.phtml:8
 #: view/resource-meta/admin/resource-template/show.phtml:7
 msgid "Resource meta"
-msgstr ""
+msgstr "Meta de recursos"
 
 #: view/resource-meta/admin/resource-template/browse.phtml:18
 msgid "Meta names count"
-msgstr ""
+msgstr "Os meta nomes contam"
 
 #: view/resource-meta/admin/resource-template/browse.phtml:41
 msgid "No resource templates found."
-msgstr ""
+msgstr "Modelos de recursos não encontrados."
 
 #: view/resource-meta/admin/resource-template/edit.phtml:27
 msgid "Map dcterms"
-msgstr ""
+msgstr "Mapa dcterms"
 
 #: view/resource-meta/admin/resource-template/edit.phtml:34
 #: view/resource-meta/admin/resource-template/show.phtml:26
 msgid "Meta names"
-msgstr ""
+msgstr "Meta nomes"
 
 #: view/resource-meta/admin/resource-template/edit.phtml:73
 #: view/resource-meta/admin/resource-template/show.phtml:61
 msgid "No resource template properties found."
-msgstr ""
+msgstr "Nenhuma propriedade de modelo de recurso encontrada."
 
 #: config/module.config.php:45
 msgid "Resource Meta"
-msgstr ""
+msgstr "Meta de recursos"
 
 #: config/module.config.php:112
 msgid "BE Press"
-msgstr ""
+msgstr "Imprensa BE"
 
 #: config/module.config.php:134
 msgid "Dublin Core Elements"
-msgstr ""
+msgstr "Elementos do Dublin Core"
 
 #: config/module.config.php:154
 msgid "Dublin Core Terms"
-msgstr ""
+msgstr "Termos do Dublin Core"
 
 #: config/module.config.php:212
 msgid "Eprints"
-msgstr ""
+msgstr "Eprints"
 
 #: config/module.config.php:234
 msgid "Highwire Press"
-msgstr ""
+msgstr "Highwire Press"
 
 #: config/module.config.php:280
 msgid "PRISM"
-msgstr ""
+msgstr "PRISM"
 
 #: config/module.config.php:394
 msgid "Search Engine Optimizations"
@@ -79,8 +83,8 @@ msgstr ""
 
 #: src/Controller/Admin/ResourceTemplateController.php:60
 msgid "Resource meta successfully updated"
-msgstr ""
+msgstr "Meta de recurso atualizado com sucesso"
 
 #: src/Controller/Admin/ResourceTemplateController.php:83
 msgid "Select meta names…"
-msgstr ""
+msgstr "Selecionar meta nomes…"
